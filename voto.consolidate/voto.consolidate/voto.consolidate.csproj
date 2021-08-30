@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>con_h_eEM_12.ico</ApplicationIcon>
+    <Version>1.1.0</Version>
+    <Description>Consolidate your videos and photos into one location.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons\con_a.png" />
+    <None Remove="icons\con_h.png" />
+    <None Remove="icons\con_n.png" />
+    <None Remove="icons\media_a.png" />
+    <None Remove="icons\media_h.png" />
+    <None Remove="icons\media_n.png" />
+    <None Remove="icons\setting_a.png" />
+    <None Remove="icons\setting_h.png" />
+    <None Remove="icons\setting_n.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="SimpleStyles.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\file.consolidate\file.consolidate.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons\con_a.png" />
+    <Resource Include="icons\con_h.png" />
+    <Resource Include="icons\con_n.png" />
+    <Resource Include="icons\media_a.png" />
+    <Resource Include="icons\media_h.png" />
+    <Resource Include="icons\media_n.png" />
+    <Resource Include="icons\setting_a.png" />
+    <Resource Include="icons\setting_h.png" />
+    <Resource Include="icons\setting_n.png" />
+    <Resource Include="SimpleStyles.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Resource>
+  </ItemGroup>
+
+</Project>
