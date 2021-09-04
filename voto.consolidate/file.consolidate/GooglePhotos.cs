@@ -39,6 +39,8 @@ namespace google.consolidate
 
         public List<PhotoAlbum> PhotoAlbums = new();
 
+        //https://console.cloud.google.com/apis/dashboard
+
         static readonly string _user = "";
         static readonly string _clientId = "";
         static readonly string _clientSecret = "";
