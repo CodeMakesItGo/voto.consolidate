@@ -215,7 +215,7 @@ namespace Voto.Consolidate
         { 
             bool gotallphotos = false;
             
-            List<string> photos = new ();
+            List<GooglePhotos.MediaInfo> photos = new ();
 
             foreach (var selectedAlbum in Settings.Instance.GoogleAlbumsSetting)
             {
@@ -250,19 +250,19 @@ namespace Voto.Consolidate
                             continue;
                         }
 
-                        photos.AddRange( await GooglePhotos.GetGooglePhotoIds(album.Id));
+                        photos.AddRange(await GooglePhotos.GetGooglePhotoIds(album.Id));
                     }
                 }
             }
 
-            foreach (var id in photos)
+            foreach (var photo in photos)
             {
                 if (IsCanceling)
                 {
                     break;
                 }
 
-                if (string.IsNullOrEmpty(id))
+                if (string.IsNullOrEmpty(photo.Title))
                 {
                     continue;
                 }
@@ -279,12 +279,12 @@ namespace Voto.Consolidate
                     Extensions = BuildFileExtensionList()
                 };
 
-                var photoInfo = await GooglePhotos.GetGooglePhotoInfo(id);
+                //var photoInfo = await GooglePhotos.GetGooglePhotoInfo(photo);
 
-                if (((FileCopy)_fileOperation).SkipCopyFile(photoInfo.Title, photoInfo.TimeStamp) == false)
+                if (((FileCopy)_fileOperation).SkipCopyFile(photo.Title, photo.TimeStamp) == false)
                 {
-                    var photo = await GooglePhotos.GetGooglePhoto(id);
-                    ((FileCopy)_fileOperation).CopyFile(photo, photoInfo.Title, photoInfo.TimeStamp);
+                    var data = await GooglePhotos.GetGooglePhoto(photo.Id);
+                    ((FileCopy)_fileOperation).CopyFile(data, photo.Title, photo.TimeStamp);
                 }
             }
 

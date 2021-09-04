@@ -21,13 +21,12 @@ namespace google.consolidate
         {
             public string Title { get; set; }
             public string Id { get; set; }
-
             public string Url { get; set; }
             public bool IsSelected { get; set; }
             public int MediaCount { get; set; }
         }
 
-        public class PhotoInfo
+        public class MediaInfo
         {
             public string Url { get; set; }
             public string Id { get; set; }
@@ -102,20 +101,30 @@ namespace google.consolidate
             ProgressReport.Instance.Report = "Logged in as " + _user;
         }
 
-        public static async Task<List<string>> GetAllGooglePhotos()
+        public static async Task<List<MediaInfo>> GetAllGooglePhotos()
         {
             if (_googlePhotosSvc == null) await Login();
 
-            List<string> ids = new();
+            List<MediaInfo> media = new();
 
             var photos = await _googlePhotosSvc.GetMediaItemsAsync();
 
-            foreach (var photo in photos)
+            foreach (var mediaItem in photos)
             {
-                ids.Add(photo.id);
+                MediaInfo pi = new()
+                {
+                    Description = mediaItem.description,
+                    Height = mediaItem.mediaMetadata.height,
+                    Id = mediaItem.id,
+                    TimeStamp = mediaItem.mediaMetadata.creationTime,
+                    Title = mediaItem.filename,
+                    Width = mediaItem.mediaMetadata.width,
+                    Url = mediaItem.productUrl
+                };
+                media.Add(pi);
             }
 
-            return ids;
+            return media;
         }
 
         public static async Task<List<PhotoAlbum>> GetPhotoAlbums()
@@ -133,23 +142,35 @@ namespace google.consolidate
             return rtn;
         }
 
-        public static async Task<List<string>> GetGooglePhotoIds(string albumId)
+        public static async Task<List<MediaInfo>> GetGooglePhotoIds(string albumId)
         {
             if (_googlePhotosSvc == null) await Login();
 
-            List<string> urls = new();
+            List<MediaInfo> media = new();
 
-            var albums = await _googlePhotosSvc.GetMediaItemsByAlbumAsync(albumId);
+            var album = await _googlePhotosSvc.GetMediaItemsByAlbumAsync(albumId);
 
-            foreach (var album in albums)
+            
+            foreach (var mediaItem in album)
             {
-                urls.Add(album.id);
+                MediaInfo pi = new()
+                {
+                    Description = mediaItem.description,
+                    Height = mediaItem.mediaMetadata.height,
+                    Id = mediaItem.id,
+                    TimeStamp = mediaItem.mediaMetadata.creationTime,
+                    Title = mediaItem.filename,
+                    Width = mediaItem.mediaMetadata.width,
+                    Url = mediaItem.productUrl
+                };
+
+                media.Add(pi);
             }
 
-            return urls;
+            return media;
         }    
 
-        public static async Task<PhotoInfo> GetGooglePhotoInfo(string photoId)
+        public static async Task<MediaInfo> GetGooglePhotoInfo(string photoId)
         {
             if (_googlePhotosSvc == null) await Login();
 
@@ -157,7 +178,7 @@ namespace google.consolidate
 
             if (mediaItem != null)
             {
-                PhotoInfo pi = new()
+                MediaInfo pi = new()
                 {
                     Description = mediaItem.description,
                     Height = mediaItem.mediaMetadata.height,
